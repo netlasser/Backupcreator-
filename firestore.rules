@@ -1,0 +1,54 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global default-deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper: Verify if current authenticated user is the designated owner
+    function isOwner() {
+      return request.auth != null &&
+             exists(/databases/$(database)/documents/settings/config) &&
+             get(/databases/$(database)/documents/settings/config).data.ownerUid == request.auth.uid;
+    }
+
+    // Validation helper for lead creation
+    function isValidLead(data) {
+      return data.keys().hasAll(['email', 'source', 'createdAt']) &&
+             data.keys().hasOnly(['email', 'source', 'createdAt', 'tier', 'clientTimestamp']) &&
+             data.email is string &&
+             data.email.size() >= 5 &&
+             data.email.size() <= 254 &&
+             data.source is string &&
+             data.source.size() <= 64 &&
+             data.createdAt == request.time &&
+             (!('tier' in data) || data.tier == null || (data.tier is string && data.tier.size() <= 64)) &&
+             (!('clientTimestamp' in data) || (data.clientTimestamp is string && data.clientTimestamp.size() <= 64));
+    }
+
+    // Leads collection: Public can CREATE leads, only OWNER can read or manage
+    match /leads/{leadId} {
+      allow create: if isValidLead(request.resource.data);
+      allow read, update, delete: if isOwner();
+    }
+
+    // Settings collection: Authenticated user can read. First user to claim becomes the owner.
+    match /settings/{configDoc} {
+      allow read: if request.auth != null;
+      // First account to sign in claims ownership
+      allow create: if request.auth != null &&
+                       configDoc == 'config' &&
+                       !exists(/databases/$(database)/documents/settings/config) &&
+                       request.resource.data.ownerUid == request.auth.uid &&
+                       request.resource.data.createdAt == request.time;
+      // Only the established owner can update settings (ownerUid remains immutable)
+      allow update: if isOwner() &&
+                       configDoc == 'config' &&
+                       request.resource.data.ownerUid == resource.data.ownerUid;
+      allow delete: if false;
+    }
+  }
+}

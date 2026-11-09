@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <!-- Outer life ring in #0E7A45 -->
+  <circle cx="16" cy="16" r="12.5" stroke="#0E7A45" stroke-width="4" />
+  <!-- 4 Life ring strap marks in crisp white -->
+  <line x1="16" y1="2" x2="16" y2="7.5" stroke="#FFFFFF" stroke-width="2.5" />
+  <line x1="16" y1="24.5" x2="16" y2="30" stroke="#FFFFFF" stroke-width="2.5" />
+  <line x1="2" y1="16" x2="7.5" y2="16" stroke="#FFFFFF" stroke-width="2.5" />
+  <line x1="24.5" y1="16" x2="30" y2="16" stroke="#FFFFFF" stroke-width="2.5" />
+  <!-- Center play triangle in solid #16211B -->
+  <polygon points="13.5,11.5 20.5,16 13.5,20.5" fill="#16211B" />
+</svg>

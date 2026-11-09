@@ -1,0 +1,89 @@
+{
+  "entities": {
+    "Lead": {
+      "title": "Lead",
+      "description": "Email signup lead for BackupCreator founding access and recovery readiness audit",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Contact email address of the creator or agency",
+          "maxLength": 254
+        },
+        "source": {
+          "type": "string",
+          "description": "The CTA button or section where the lead converted",
+          "maxLength": 64
+        },
+        "tier": {
+          "type": "string",
+          "description": "The pricing tier selected if clicked from pricing section",
+          "maxLength": 64
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the lead was stored"
+        },
+        "clientTimestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Client ISO timestamp at submission"
+        }
+      },
+      "required": ["email", "source", "createdAt"]
+    },
+    "AdminSettings": {
+      "title": "AdminSettings",
+      "description": "Launch settings, owner claim, checklist state, and visitor count",
+      "type": "object",
+      "properties": {
+        "ownerUid": {
+          "type": "string",
+          "description": "Firebase Auth UID of the designated product owner",
+          "maxLength": 128
+        },
+        "ownerEmail": {
+          "type": "string",
+          "description": "Email address of the designated product owner",
+          "maxLength": 254
+        },
+        "liveUrl": {
+          "type": "string",
+          "description": "Configured live deployment URL for launch kit replacement",
+          "maxLength": 512
+        },
+        "visitorsCount": {
+          "type": "number",
+          "description": "Approximate visitors entered by owner for conversion rate calculation"
+        },
+        "checklist": {
+          "type": "object",
+          "description": "Checklist progress mapping for launch tasks"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when the owner claimed the app"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when settings were last modified"
+        }
+      },
+      "required": ["ownerUid", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/leads/{leadId}": {
+      "schema": "Lead",
+      "description": "Collection of prospective creator and agency leads"
+    },
+    "/settings/{configDoc}": {
+      "schema": "AdminSettings",
+      "description": "Application settings and owner identity"
+    }
+  }
+}
