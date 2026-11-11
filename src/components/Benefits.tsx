@@ -60,10 +60,10 @@ export const Benefits: React.FC = () => {
             return (
               <div
                 key={idx}
-                className="bg-[#FFFFFF] border border-[#E3E1DA] rounded-[8px] p-7 md:p-8 flex flex-col justify-between"
+                className="bg-[#FFFFFF] border border-[#E3E1DA] rounded-[8px] p-7 md:p-8 flex flex-col justify-between taste-card group"
               >
                 <div>
-                  <div className="w-10 h-10 rounded-[6px] border border-[#E3E1DA] flex items-center justify-center text-[#16211B] mb-5 bg-[#FAFAF7]">
+                  <div className="w-10 h-10 rounded-[6px] border border-[#E3E1DA] flex items-center justify-center text-[#16211B] mb-5 bg-[#FAFAF7] group-hover:border-[#16211B] transition-colors">
                     <Icon className="w-5 h-5 stroke-[1.5]" />
                   </div>
                   <h3 className="heading-h3 text-[#16211B] mb-2.5">

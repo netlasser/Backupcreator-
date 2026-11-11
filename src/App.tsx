@@ -16,28 +16,46 @@ import { FinalCTA } from './components/FinalCTA';
 import { Footer } from './components/Footer';
 import { TierModal } from './components/TierModal';
 import { AdminHQ } from './components/admin/AdminHQ';
+import { CreatorVault } from './components/vault/CreatorVault';
 
-function checkIsAdminRoute(): boolean {
-  if (typeof window === 'undefined') return false;
+type AppView = 'landing' | 'vault' | 'admin';
+
+function determineCurrentView(): AppView {
+  if (typeof window === 'undefined') return 'landing';
   const path = window.location.pathname;
   const hash = window.location.hash;
-  return (
+
+  if (
     path === '/admin' ||
     path.startsWith('/admin/') ||
     hash === '#admin' ||
     hash === '#/admin' ||
     hash.startsWith('#/admin')
-  );
+  ) {
+    return 'admin';
+  }
+
+  if (
+    path === '/vault' ||
+    path.startsWith('/vault/') ||
+    hash === '#vault' ||
+    hash === '#/vault' ||
+    hash.startsWith('#/vault')
+  ) {
+    return 'vault';
+  }
+
+  return 'landing';
 }
 
 export default function App() {
-  const [isAdmin, setIsAdmin] = useState(checkIsAdminRoute);
+  const [view, setView] = useState<AppView>(determineCurrentView);
   const [selectedTier, setSelectedTier] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const handleLocationChange = () => {
-      setIsAdmin(checkIsAdminRoute());
+      setView(determineCurrentView());
     };
 
     window.addEventListener('popstate', handleLocationChange);
@@ -48,12 +66,26 @@ export default function App() {
     };
   }, []);
 
-  // Admin Route View (No marketing hero, clean dedicated app shell)
-  if (isAdmin) {
+  // 1. Admin Route View
+  if (view === 'admin') {
     return <AdminHQ />;
   }
 
-  // Public Landing Page
+  // 2. Creator Vault Route View
+  if (view === 'vault') {
+    return (
+      <CreatorVault
+        onBackToLanding={() => {
+          setView('landing');
+          if (window.location.hash.includes('vault')) {
+            window.history.pushState(null, '', window.location.pathname || '/');
+          }
+        }}
+      />
+    );
+  }
+
+  // 3. Public Landing Page
   const handleSelectTier = (tierName: string) => {
     setSelectedTier(tierName);
     setIsModalOpen(true);
@@ -69,10 +101,15 @@ export default function App() {
     }
   };
 
+  const handleOpenVault = () => {
+    setView('vault');
+    window.location.hash = '#/vault';
+  };
+
   return (
     <div className="min-h-screen bg-[#FAFAF7] text-[#16211B] flex flex-col font-body selection:bg-[#0E7A45]/20 selection:text-[#16211B]">
-      {/* 1. Nav */}
-      <Nav onCtaClick={handleScrollToTopCta} />
+      {/* 1. Nav with Vault link */}
+      <Nav onCtaClick={handleScrollToTopCta} onOpenVault={handleOpenVault} />
 
       <main className="flex-1">
         {/* 2. Hero (Background token) */}

@@ -17,8 +17,12 @@ export const Footer: React.FC = () => {
           <p>
             Documented recovery readiness · Encrypted creator vaults · Zero credentials requested
           </p>
+          <p className="text-[11px] text-[#5C665F]/80">
+            Studio imagery: Creator desk at dusk licensed for BackupCreator.
+          </p>
         </div>
       </div>
     </footer>
   );
 };
+

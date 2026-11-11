@@ -66,9 +66,9 @@ export const Pricing: React.FC<PricingProps> = ({ onSelectTier }) => {
           {tiers.map((tier) => (
             <div
               key={tier.id}
-              className={`relative bg-[#FFFFFF] rounded-[8px] p-8 flex flex-col justify-between transition-all ${
+              className={`relative bg-[#FFFFFF] rounded-[8px] p-8 flex flex-col justify-between taste-card ${
                 tier.isRecommended
-                  ? 'border-2 border-[#0E7A45] pt-10'
+                  ? 'border-2 border-[#0E7A45] pt-10 shadow-xs'
                   : 'border border-[#E3E1DA]'
               }`}
             >

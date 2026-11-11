@@ -36,9 +36,9 @@ export const Problem: React.FC = () => {
           {problems.map((item) => (
             <div
               key={item.index}
-              className="border-t border-[#E3E1DA] pt-6 flex flex-col justify-start"
+              className="border-t border-[#E3E1DA] pt-6 flex flex-col justify-start group hover:border-[#16211B] transition-colors"
             >
-              <span className="font-mono text-[13px] font-semibold text-[#5C665F] mb-3">
+              <span className="font-mono text-[13px] font-semibold text-[#5C665F] mb-3 group-hover:text-[#0E7A45] transition-colors">
                 {item.index}
               </span>
               <p className="font-heading font-semibold text-[20px] md:text-[22px] text-[#16211B] leading-[1.35] max-w-[50ch]">
